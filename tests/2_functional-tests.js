@@ -106,7 +106,7 @@ suite('Functional Tests', function() {
       
       test('Test GET /api/books/[id] with valid id in db',  function(done){
           chai.request(server)
-            .post('/api/books'+_ida)
+            .get('/api/books'+_ida)
             .end(function(err, res){
               assert.equal(res.status, 200);
               assert.property(res.body, 'comments', 'Book should contain comments');
