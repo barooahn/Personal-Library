@@ -50,11 +50,13 @@ let _ida;
               title: 'testing title'
             })
             .end(function(err, res){
-              assert.equal(res.status, 200);
-              assert.property(res.body, 'title', 'Book should contain title');
-              assert.equal(res.body.title, 'testing title');
-              assert.property(res.body, '_id');
-              done(); 
+            assert.equal(res.status, 200);
+            //assert.property(res.body, 'comments', 'Book should contain comments');
+            //assert.isArray(res.body.comments, 'Comments should be an array');
+            assert.property(res.body, 'title', 'Book should contain title');
+            assert.property(res.body, '_id', 'Book should contain _id');
+            assert.equal(res.body.title, 'testing title');
+            done();
             });
       });
       
@@ -108,8 +110,8 @@ let _ida;
             .get('/api/books/'+_ida)
             .end(function(err, res){
               assert.equal(res.status, 200);
-              assert.property(res.body, 'comments', 'Book should contain comments');
               assert.isArray(res.body.comments, 'Comments should be an array');
+              assert.property(res.body, 'comments', 'Book should contain comments');
               assert.property(res.body, 'title', 'Book should contain title');
               assert.property(res.body, '_id', 'Book should contain _id');
               assert.equal(res.body._id, _ida);
