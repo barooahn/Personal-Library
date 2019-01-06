@@ -57,7 +57,7 @@ module.exports = function (app) {
       MongoClient.connect(MONGODB_CONNECTION_STRING, function(err, db) {
         const collection = db.collection(project);
         collection.remove(),function(err,doc){
-            (!err) ? res.send('complete delete successful') : res.send('could not delete ' + req.body._id + err);
+            (!err) ? res.send('complete delete successful') : res.send('could not delete ' + err);
           }  
       });
        
@@ -73,7 +73,10 @@ module.exports = function (app) {
           const collection = db.collection(project);
             collection.findOne({_id: bookid},function(err, doc) {
               //res.json({_id: doc._id, title: doc.title, comments: doc.comments})
-              (err)? res.send('no book exists'): res.json(doc);           
+              
+              if(err){res.send('no book exists' + err)}
+              else if(doc == null) {res.send('no book exists')}
+              else{ res.json(doc)};           
             });
           db.close();
         });
