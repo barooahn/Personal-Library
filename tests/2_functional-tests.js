@@ -41,7 +41,36 @@ suite('Functional Tests', function() {
     suite('POST /api/books with title => create book object/expect book object', function() {
       
       test('Test POST /api/books with title', function(done) {
-        //done();
+        chai.request(server)
+            .post('/api/books')
+            .send({
+              issue_title: 'testing title',
+              issue_text: 'testing text',
+              created_by: 'Functional Test - Every field filled in',
+              assigned_to: 'fcctester',
+              status_text: 'In QA_update'
+            })
+            .end(function(err, res){
+              assert.equal(res.status, 200);
+              assert.property(res.body, 'issue_title');
+              assert.property(res.body, 'issue_text');
+              assert.property(res.body, 'created_on');
+              assert.property(res.body, 'updated_on');
+              assert.property(res.body, 'created_by');
+              assert.property(res.body, 'assigned_to');
+              assert.property(res.body, 'open');
+              assert.property(res.body, 'status_text');
+              assert.property(res.body, '_id');
+              _ida = res.body._id;
+              assert.equal(res.body.issue_title, 'testing title');
+              assert.equal(res.body.issue_text, 'testing text');
+              assert.equal(res.body.created_by, 'Functional Test - Every field filled in');
+              assert.equal(res.body.assigned_to, 'fcctester');
+              assert.equal(res.body.status_text, 'In QA_update');
+              assert.isBoolean(res.body.open);
+              assert.equal(res.body.open, true);
+              done();
+            });
       });
       
       test('Test POST /api/books with no title given', function(done) {

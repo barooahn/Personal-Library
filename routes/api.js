@@ -74,7 +74,7 @@ module.exports = function (app) {
               //res.json({_id: doc._id, title: doc.title, comments: doc.comments})
               
               if(err){res.send('no book exists' + err)}
-              else if(doc == null) {res.send('no book exists')}
+              else if(doc === null) {res.send('no book exists')}
               else{ res.json(doc)};           
             });
           db.close();
