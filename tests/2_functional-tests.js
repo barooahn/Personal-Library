@@ -63,12 +63,10 @@ suite('Functional Tests', function() {
             .post('/api/books')
             .send({})
             .end(function(err, res){
-            assert.equal(res.status, 200);
-            assert.equal(res.text, 'missing title');
+              assert.equal(res.status, 200);
+              assert.equal(res.text, 'missing title');
               done();
-      
             });
-        //done();
       });
       
     });
@@ -77,11 +75,20 @@ suite('Functional Tests', function() {
     suite('GET /api/books => array of books', function(){
       
       test('Test GET /api/books',  function(done){
-        //done();
-      });      
-      
+        chai.request(server)
+        .get('/api/books')
+        .end(function(err, res){
+          assert.equal(res.status, 200);
+          assert.isArray(res.body, 'response should be an array');
+          assert.property(res.body[0], 'commentcount', 'Books in array should contain commentcount');
+          assert.property(res.body[0], 'title', 'Books in array should contain title');
+          assert.property(res.body[0], '_id', 'Books in array should contain _id');
+          done();
+        });      
+    
     });
 
+    });
 
     suite('GET /api/books/[id] => book object with [id]', function(){
       
