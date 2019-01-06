@@ -63,13 +63,19 @@ module.exports = function (app) {
        
     });
 
-
-
   app.route('/api/books/:id')
     .get(function (req, res){
       var bookid = req.params.id;
       //json res format: {"_id": bookid, "title": book_title, "comments": [comment,comment,...]}
-      
+      MongoClient.connect(MONGODB_CONNECTION_STRING, function(err, db) {
+          const collection = db.collection(project);
+            collection.find({_id:bookid}).toArray(function(err, doc) {
+              
+              console.log(doc);
+              res.json({_id: doc._id, title: doc.title, comments: doc.comments})
+            });
+          db.close();
+        });
     
     
     })
