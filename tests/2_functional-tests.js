@@ -32,7 +32,6 @@ let _ida;
             assert.property(res.body[0], 'commentcount', 'Books in array should contain commentcount');
             assert.property(res.body[0], 'title', 'Books in array should contain title');
             assert.property(res.body[0], '_id', 'Books in array should contain _id');
-            _ida = res.body[0]._id;
             done();
           });
   });
@@ -84,7 +83,7 @@ let _ida;
           assert.property(res.body[0], 'commentcount', 'Books in array should contain commentcount');
           assert.property(res.body[0], 'title', 'Books in array should contain title');
           assert.property(res.body[0], '_id', 'Books in array should contain _id');
-          _ida = res.body._id[0]._id;
+          _ida = res.body[0]._id; 
           done();
         });
 
@@ -106,7 +105,7 @@ let _ida;
       
       test('Test GET /api/books/[id] with valid id in db',  function(done){
           chai.request(server)
-            .get('/api/books'+_ida)
+            .get('/api/books/'+_ida)
             .end(function(err, res){
               assert.equal(res.status, 200);
               assert.property(res.body, 'comments', 'Book should contain comments');
