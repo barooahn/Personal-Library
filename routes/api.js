@@ -69,14 +69,13 @@ module.exports = function (app) {
       console.log("id", bookid);
       //json res format: {"_id": bookid, "title": book_title, "comments": [comment,comment,...]}
       MongoClient.connect(MONGODB_CONNECTION_STRING, function(err, db) {
-          console.log(err);
-          console.log('db connected');
           const collection = db.collection(project);
             collection.find({_id:ObjectId(bookid)},function(err, doc) {
               console.log('here');
-              console.log(err);
+              if(err)console.log(err);
               console.log(doc);
-              res.json({_id: doc._id, title: doc.title, comments: doc.comments})
+              //res.json({_id: doc._id, title: doc.title, comments: doc.comments})
+              res.send(doc);
             });
           db.close();
         });
