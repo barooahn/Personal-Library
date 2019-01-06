@@ -25,7 +25,12 @@ module.exports = function (app) {
         MongoClient.connect(MONGODB_CONNECTION_STRING, function(err, db) {
           const collection = db.collection(project);
             collection.find().toArray(function(err, docs) {
-              
+              const booksRes = []
+              docs.map(x => {
+                  
+                x.title
+                
+              }
               console.log(docs);
               {res.json(docs)}
             });
