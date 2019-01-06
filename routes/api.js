@@ -52,9 +52,8 @@ module.exports = function (app) {
         MongoClient.connect(MONGODB_CONNECTION_STRING, function(err, db) {
           const collection = db.collection(project);
             collection.insertOne({title: title, comments:[]},function(err,doc){
-              const newBook_id = doc.insertedId;
-
-              res.json(doc);
+              //doc._id = doc.insertedId;
+              res.json(doc.ops[0]);
             });
           db.close();
         });
@@ -67,8 +66,8 @@ module.exports = function (app) {
         const collection = db.collection(project);
         collection.remove();
         res.send("complete delete successful");
+        db.close();
       });
-       
     });
 
   app.route('/api/books/:id')
@@ -107,6 +106,7 @@ module.exports = function (app) {
             (!err) ? res.json(doc.value) : res.send('could not add comment '+ req.params.id +' '+ err);
           }  
         );
+        db.close();
       });
       
     })
@@ -124,6 +124,7 @@ module.exports = function (app) {
               (!err) ? res.send('delete successful') : res.send('no book exists');
             }  
           );
+        db.close();
       });
     });
   
