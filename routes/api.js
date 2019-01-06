@@ -56,7 +56,8 @@ module.exports = function (app) {
       //if successful response will be 'complete delete successful'
       MongoClient.connect(MONGODB_CONNECTION_STRING, function(err, db) {
         const collection = db.collection(project);
-        collection.remove(),function(err,doc){
+        collection.remove(),function(err,writeResult){
+            console.log('writeResult', writeResult);
             (!err) ? res.send('complete delete successful') : res.send('could not delete ' + err);
           }  
       });
@@ -67,7 +68,7 @@ module.exports = function (app) {
     .get(function (req, res){
       if(!ObjectId.isValid(req.params.id)){res.send('no book exists')}
       const bookid = new ObjectId(req.params.id);
-      console.log("id", bookid);
+      //console.log("id", bookid);
       //json res format: {"_id": bookid, "title": book_title, "comments": [comment,comment,...]}
       MongoClient.connect(MONGODB_CONNECTION_STRING, function(err, db) {
           const collection = db.collection(project);
@@ -111,7 +112,8 @@ module.exports = function (app) {
           collection.findAndRemove(
             {_id:new ObjectId(req.body._id)},
             [['_id',1]],
-            function(err,doc){
+            function(err,writeResult){
+              console.log('writeResult', writeResult);
               (!err) ? res.send('delete successful') : res.send('no book exists');
             }  
           );
