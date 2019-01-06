@@ -11,6 +11,9 @@ var chai = require('chai');
 var assert = chai.assert;
 var server = require('../server');
 
+
+let _ida;
+
 chai.use(chaiHttp);
 
 suite('Functional Tests', function() {
@@ -44,31 +47,16 @@ suite('Functional Tests', function() {
         chai.request(server)
             .post('/api/books')
             .send({
-              issue_title: 'testing title',
-              issue_text: 'testing text',
-              created_by: 'Functional Test - Every field filled in',
-              assigned_to: 'fcctester',
-              status_text: 'In QA_update'
+              title: 'testing title',
             })
             .end(function(err, res){
               assert.equal(res.status, 200);
-              assert.property(res.body, 'issue_title');
-              assert.property(res.body, 'issue_text');
-              assert.property(res.body, 'created_on');
-              assert.property(res.body, 'updated_on');
-              assert.property(res.body, 'created_by');
-              assert.property(res.body, 'assigned_to');
-              assert.property(res.body, 'open');
-              assert.property(res.body, 'status_text');
+              assert.property(res.body, 'title');
+              assert.isArray(res.body.comments, 'response should be an array');
+              assert.property(res.body.comments, 'comments', 'Books in array should contain commentcount');
               assert.property(res.body, '_id');
               _ida = res.body._id;
-              assert.equal(res.body.issue_title, 'testing title');
-              assert.equal(res.body.issue_text, 'testing text');
-              assert.equal(res.body.created_by, 'Functional Test - Every field filled in');
-              assert.equal(res.body.assigned_to, 'fcctester');
-              assert.equal(res.body.status_text, 'In QA_update');
-              assert.isBoolean(res.body.open);
-              assert.equal(res.body.open, true);
+              assert.equal(res.body.title, 'testing title');
               done();
             });
       });
