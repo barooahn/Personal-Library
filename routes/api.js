@@ -54,7 +54,7 @@ module.exports = function (app) {
             collection.insertOne({title: title, comments:[]},function(err,doc){
               const newBook_id = doc.insertedId;
 
-              res.json({title: title, _id: newBook_id});
+              res.json(doc);
             });
           db.close();
         });
@@ -120,7 +120,7 @@ module.exports = function (app) {
             {_id:new ObjectId(req.body._id)},
             [['_id',1]],
             function(err,writeResult){
-              console.log('writeResult', writeResult);
+              //console.log('writeResult', writeResult);
               (!err) ? res.send('delete successful') : res.send('no book exists');
             }  
           );
