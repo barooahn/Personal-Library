@@ -54,6 +54,14 @@ module.exports = function (app) {
     
     .delete(function(req, res){
       //if successful response will be 'complete delete successful'
+      MongoClient.connect(MONGODB_CONNECTION_STRING, function(err, db) {
+        const collection = db.collection(project);
+        collection.remove(),
+          function(err,doc){
+            (!err) ? res.send('delete successful') : res.send('could not delete ' + req.body._id + err);
+          }  
+      });
+       
     });
 
 
@@ -73,6 +81,16 @@ module.exports = function (app) {
     .delete(function(req, res){
       var bookid = req.params.id;
       //if successful response will be 'delete successful'
+      MongoClient.connect(MONGODB_CONNECTION_STRING, function(err, db) {
+          const collection = db.collection(project);
+          collection.findAndRemove(
+            {_id:new ObjectId(req.body._id)},
+            [['_id',1]],
+            function(err,doc){
+              (!err) ? res.send('delete successful') : res.send('could not delete ' + req.body._id + err);
+            }  
+          );
+      });
     });
   
 };
