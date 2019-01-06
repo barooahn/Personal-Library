@@ -40,6 +40,7 @@ suite('Functional Tests', function() {
 
   suite('Routing tests', function() {
 
+  let _ida;  
 
     suite('POST /api/books with title => create book object/expect book object', function() {
       
@@ -53,6 +54,8 @@ suite('Functional Tests', function() {
               assert.equal(res.status, 200);
               assert.property(res.body, 'title', 'Book should contain title');
               assert.equal(res.body.title, 'testing title');
+              assert.property(res.body, '_id');
+              _ida = res.body._id;
               done();
       
             });
@@ -93,11 +96,29 @@ suite('Functional Tests', function() {
     suite('GET /api/books/[id] => book object with [id]', function(){
       
       test('Test GET /api/books/[id] with id not in db',  function(done){
-        //done();
+          chai.request(server)
+            .post('/api/books')
+            .send({
+              _id: '12334'
+            })
+            .end(function(err, res){
+              assert.equal(res.status, 200);
+              assert.equal(res.text, 'no book exists');
+              done();
+            });
       });
       
       test('Test GET /api/books/[id] with valid id in db',  function(done){
-        //done();
+          chai.request(server)
+            .post('/api/books')
+            .send({
+              _id: _ida
+            })
+            .end(function(err, res){
+              assert.equal(res.status, 200);
+              assert.equal(res.text, 'no book exists');
+              done();
+            });
       });
       
     });
