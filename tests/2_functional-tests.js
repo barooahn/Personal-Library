@@ -107,15 +107,17 @@ suite('Functional Tests', function() {
       test('Test GET /api/books/[id] with valid id in db',  function(done){
           chai.request(server)
             .post('/api/books'+_ida)
-  
             .end(function(err, res){
               assert.equal(res.status, 200);
-             assert.equal(res.body.title, 'testing title');
-          //    assert.equal(res.body._id, _ida);
+              assert.property(res.body, 'comments', 'Book should contain comments');
+              assert.isArray(res.body.comments, 'Comments should be an array');
+              assert.property(res.body, 'title', 'Book should contain title');
+              assert.property(res.body, '_id', 'Book should contain _id');
+              assert.equal(res.body._id, _ida);
               done();
             });
       });
-      
+    
     });
 
 
