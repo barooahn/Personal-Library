@@ -30,6 +30,12 @@ module.exports = function (app) {
     
       MongoClient.connect(MONGODB_CONNECTION_STRING, function(err, db) {
         const collection = db.collection(project);
+          collection.insertOne({title: title},function(err,doc){
+            const newBook_id = doc.insertedId;
+            
+            res.json({title: title, _id: newBook_id});
+          });
+        db.close();
       });
     })
     
