@@ -65,7 +65,7 @@ module.exports = function (app) {
 
   app.route('/api/books/:id')
     .get(function (req, res){
-      //if(!ObjectId.isValid(req.params.id)){res.send('no book exists')}
+      if(!ObjectId.isValid(req.params.id)){res.send('no book exists')}
       const bookid = new ObjectId(req.params.id);
       console.log("id", bookid);
       //json res format: {"_id": bookid, "title": book_title, "comments": [comment,comment,...]}
@@ -109,7 +109,7 @@ module.exports = function (app) {
             {_id:new ObjectId(req.body._id)},
             [['_id',1]],
             function(err,doc){
-              (!err) ? res.send('delete successful') : res.send('could not delete ' + req.body._id + err);
+              (!err) ? res.send('delete successful') : res.send('no book exists');
             }  
           );
       });
