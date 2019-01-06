@@ -65,14 +65,15 @@ module.exports = function (app) {
 
   app.route('/api/books/:id')
     .get(function (req, res){
-      var bookid = new ObjectId(req.params.id);
+      //if(!ObjectId.isValid(req.params.id)){res.send('no book exists')}
+      const bookid = new ObjectId(req.params.id);
       console.log("id", bookid);
       //json res format: {"_id": bookid, "title": book_title, "comments": [comment,comment,...]}
       MongoClient.connect(MONGODB_CONNECTION_STRING, function(err, db) {
           const collection = db.collection(project);
             collection.findOne({_id: bookid},function(err, doc) {
               //res.json({_id: doc._id, title: doc.title, comments: doc.comments})
-              res.json(doc);
+              (err)? res.send('no book exists'): res.json(doc);           
             });
           db.close();
         });
@@ -92,7 +93,7 @@ module.exports = function (app) {
           {$push: {comments: comment}},
           {new: true},
           function(err,doc){
-            (!err) ? res.send('successfully updated') : res.send('could not update '+ req.params.id +' '+ err);
+            (!err) ? res.json(doc.value) : res.send('could not add comment '+ req.params.id +' '+ err);
           }  
         );
       });
