@@ -56,8 +56,7 @@ suite('Functional Tests', function() {
               assert.equal(res.body.title, 'testing title');
               assert.property(res.body, '_id');
               _ida = res.body._id;
-              done();
-      
+              done(); 
             });
       });
       
@@ -83,10 +82,12 @@ suite('Functional Tests', function() {
         .end(function(err, res){
           assert.equal(res.status, 200);
           assert.isArray(res.body, 'response should be an array');
-
+          assert.property(res.body[0], 'commentcount', 'Books in array should contain commentcount');
+          assert.property(res.body[0], 'title', 'Books in array should contain title');
+          assert.property(res.body[0], '_id', 'Books in array should contain _id');
           done();
         });      
-    
+
     });
 
     });
@@ -105,13 +106,12 @@ suite('Functional Tests', function() {
       
       test('Test GET /api/books/[id] with valid id in db',  function(done){
           chai.request(server)
-            .post('/api/books')
-            .send({
-              _id: _ida
-            })
+            .post('/api/books'+_ida)
+  
             .end(function(err, res){
               assert.equal(res.status, 200);
-              assert.equal(res.text, 'no book exists');
+             assert.equal(res.body.title, 'testing title');
+          //    assert.equal(res.body._id, _ida);
               done();
             });
       });
