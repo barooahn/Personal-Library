@@ -25,18 +25,20 @@ module.exports = function (app) {
         MongoClient.connect(MONGODB_CONNECTION_STRING, function(err, db) {
           const collection = db.collection(project);
             collection.find().toArray(function(err, docs) {
-              console.log(docs);
-              //if(docs.length>0){
-                const booksRes = [];
-                docs.map(x => {
-                  const commentcount = x.comments.length;  
-                    booksRes.push({title: x.title, _id: x._id, commentcount: commentcount});
-                });
-                //console.log(booksRes);
-                {res.json(booksRes)};
-             // } else {
+              //console.log(docs);
+              if(docs){
+                if(docs.length>0){
+                  const booksRes = [];
+                  docs.map(x => {
+                    const commentcount = x.comments.length;  
+                      booksRes.push({title: x.title, _id: x._id, commentcount: commentcount});
+                  });
+                  //console.log(booksRes);
+                  {res.json(booksRes)};
+                }
+              } else {
                 res.send('no books yet');
-             // }
+              }
             });
           db.close();
         });
