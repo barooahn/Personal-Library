@@ -57,7 +57,7 @@ module.exports = function (app) {
       MongoClient.connect(MONGODB_CONNECTION_STRING, function(err, db) {
         const collection = db.collection(project);
         collection.remove(),function(err,doc){
-            (!err) ? res.send('delete successful') : res.send('could not delete ' + req.body._id + err);
+            (!err) ? res.send('complete delete successful') : res.send('could not delete ' + req.body._id + err);
           }  
       });
        
@@ -69,12 +69,28 @@ module.exports = function (app) {
     .get(function (req, res){
       var bookid = req.params.id;
       //json res format: {"_id": bookid, "title": book_title, "comments": [comment,comment,...]}
+      
+    
+    
     })
     
     .post(function(req, res){
       var bookid = req.params.id;
       var comment = req.body.comment;
       //json res format same as .get
+      MongoClient.connect(MONGODB_CONNECTION_STRING, function(err, db) {
+        const collection = db.collection(project);
+        collection.findAndModify(
+          {_id:new ObjectId(req.params.id)},
+          [['_id',1]],
+          {$push: {comments: comment}},
+          {new: true},
+          function(err,doc){
+            (!err) ? res.send('successfully updated') : res.send('could not update '+ req.params.id +' '+ err);
+          }  
+        );
+      });
+      
     })
     
     .delete(function(req, res){
