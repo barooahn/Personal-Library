@@ -65,17 +65,14 @@ module.exports = function (app) {
 
   app.route('/api/books/:id')
     .get(function (req, res){
-      var bookid = req.params.id;
+      var bookid = new ObjectId(req.params.id);
       console.log("id", bookid);
       //json res format: {"_id": bookid, "title": book_title, "comments": [comment,comment,...]}
       MongoClient.connect(MONGODB_CONNECTION_STRING, function(err, db) {
           const collection = db.collection(project);
-            collection.find({_id:ObjectId(bookid)},function(err, doc) {
-              console.log('here');
-              if(err)console.log(err);
-              console.log(doc);
+            collection.findOne({_id: bookid},function(err, doc) {
               //res.json({_id: doc._id, title: doc.title, comments: doc.comments})
-              res.send(doc);
+              res.json(doc);
             });
           db.close();
         });
