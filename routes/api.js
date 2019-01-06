@@ -56,10 +56,8 @@ module.exports = function (app) {
       //if successful response will be 'complete delete successful'
       MongoClient.connect(MONGODB_CONNECTION_STRING, function(err, db) {
         const collection = db.collection(project);
-        collection.remove(),function(err,writeResult){
-            console.log('writeResult', writeResult);
-            (!err) ? res.send('complete delete successful') : res.send('could not delete ' + err);
-          }  
+        collection.remove();
+        res.send("complete delete successful");
       });
        
     });
