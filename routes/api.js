@@ -22,6 +22,15 @@ module.exports = function (app) {
     .get(function (req, res){
       //response will be array of book objects
       //json res format: [{"_id": bookid, "title": book_title, "commentcount": num_of_comments },...]
+        MongoClient.connect(MONGODB_CONNECTION_STRING, function(err, db) {
+          const collection = db.collection(project);
+            collection.find().toArray(function(err, docs) {
+              
+              console.log(docs);
+              {res.json(docs)}
+            });
+          db.close();
+        });
     })
     
     .post(function (req, res){
@@ -30,7 +39,7 @@ module.exports = function (app) {
     
       MongoClient.connect(MONGODB_CONNECTION_STRING, function(err, db) {
         const collection = db.collection(project);
-          collection.insertOne({title: title},function(err,doc){
+          collection.insertOne({title: title, comments:[]},function(err,doc){
             const newBook_id = doc.insertedId;
             
             res.json({title: title, _id: newBook_id});
