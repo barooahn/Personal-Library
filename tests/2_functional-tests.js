@@ -47,21 +47,27 @@ suite('Functional Tests', function() {
         chai.request(server)
             .post('/api/books')
             .send({
-              title: 'testing title',
+              title: 'testing title'
             })
             .end(function(err, res){
               assert.equal(res.status, 200);
-              assert.property(res.body, 'title');
-              assert.isArray(res.body.comments, 'response should be an array');
-              assert.property(res.body.comments, 'comments', 'Books in array should contain commentcount');
-              assert.property(res.body, '_id');
-              _ida = res.body._id;
+              assert.property(res.body, 'title', 'Book should contain title');
               assert.equal(res.body.title, 'testing title');
               done();
+      
             });
       });
       
       test('Test POST /api/books with no title given', function(done) {
+        chai.request(server)
+            .post('/api/books')
+            .send({})
+            .end(function(err, res){
+            assert.equal(res.status, 200);
+            assert.equal(res.text, 'missing title');
+              done();
+      
+            });
         //done();
       });
       
