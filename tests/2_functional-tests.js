@@ -83,9 +83,7 @@ suite('Functional Tests', function() {
         .end(function(err, res){
           assert.equal(res.status, 200);
           assert.isArray(res.body, 'response should be an array');
-          assert.property(res.body[0], 'commentcount', 'Books in array should contain commentcount');
-          assert.property(res.body[0], 'title', 'Books in array should contain title');
-          assert.property(res.body[0], '_id', 'Books in array should contain _id');
+
           done();
         });      
     
@@ -95,17 +93,14 @@ suite('Functional Tests', function() {
 
     suite('GET /api/books/[id] => book object with [id]', function(){
       
-      test('Test GET /api/books/[id] with id not in db',  function(done){
-          chai.request(server)
-            .post('/api/books')
-            .send({
-              _id: '12334'
-            })
-            .end(function(err, res){
-              assert.equal(res.status, 200);
-              assert.equal(res.text, 'no book exists');
-              done();
-            });
+      test('Test GET /api/books/[id] with unknown id',  function(done){
+         chai.request(server)
+          .get('/api/books/17342734294')
+          .end(function(err, res){
+            assert.equal(res.status, 200);
+            assert.equal(res.text, 'no book exists');
+            done();
+          });
       });
       
       test('Test GET /api/books/[id] with valid id in db',  function(done){
