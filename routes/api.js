@@ -30,7 +30,7 @@ module.exports = function (app) {
                 const commentcount = x.comments.length;  
                   booksRes.push({title: x.title, _id: x._id, commentcount: commentcount});
               });
-              console.log(booksRes);
+              //console.log(booksRes);
               {res.json(booksRes)}
             });
           db.close();
@@ -69,11 +69,11 @@ module.exports = function (app) {
       //json res format: {"_id": bookid, "title": book_title, "comments": [comment,comment,...]}
       MongoClient.connect(MONGODB_CONNECTION_STRING, function(err, db) {
           const collection = db.collection(project);
-            collection.find({_id:bookid}).toArray(function(err, doc) {
+            collection.find({_id:new ObjectId(bookid)}),function(err, doc) {
               
               console.log(doc);
               res.json({_id: doc._id, title: doc.title, comments: doc.comments})
-            });
+            };
           db.close();
         });
     
