@@ -15,6 +15,8 @@ const MONGODB_CONNECTION_STRING = process.env.DB;
 //Example connection: MongoClient.connect(MONGODB_CONNECTION_STRING, function(err, db) {});
 
 module.exports = function (app) {
+  
+  const project = 'books';
 
   app.route('/api/books')
     .get(function (req, res){
@@ -27,7 +29,7 @@ module.exports = function (app) {
       //response will contain new book object including atleast _id and title
     
       MongoClient.connect(MONGODB_CONNECTION_STRING, function(err, db) {
-        
+        const collection = db.collection(project);
       });
     })
     
