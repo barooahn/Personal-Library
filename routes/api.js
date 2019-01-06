@@ -27,12 +27,11 @@ module.exports = function (app) {
             collection.find().toArray(function(err, docs) {
               const booksRes = []
               docs.map(x => {
-                  
-                x.title
-                
-              }
-              console.log(docs);
-              {res.json(docs)}
+                const commentcount = x.comments.length;  
+                  booksRes.push({title: x.title, _id: x._id, commentcount: commentcount});
+              });
+              console.log(booksRes);
+              {res.json(booksRes)}
             });
           db.close();
         });
@@ -46,7 +45,7 @@ module.exports = function (app) {
         const collection = db.collection(project);
           collection.insertOne({title: title, comments:[]},function(err,doc){
             const newBook_id = doc.insertedId;
-            
+          
             res.json({title: title, _id: newBook_id});
           });
         db.close();
